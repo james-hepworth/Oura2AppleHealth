@@ -123,18 +123,23 @@ export default {
     }
 
     // Extract and merge data for all days in range
-    const results = [];
+    // Use a Map to keep only the most recent entry per date
+    const resultsByDate = {};
     if (sleepData?.data?.length > 0) {
       for (const dayData of sleepData.data) {
-        results.push({
+        // Store by date - last entry wins (most recent)
+        resultsByDate[dayData.day] = {
           date: dayData.day,
           hrv: dayData.average_hrv,
           rhr: dayData.lowest_heart_rate,
           spo2: spo2ByDate[dayData.day] || null,
           vo2_max: vo2ByDate[dayData.day] || null
-        });
+        };
       }
     }
+    
+    // Convert to array
+    const results = Object.values(resultsByDate);
 
     // Return single object if only one day, array if multiple days
     let response;

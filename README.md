@@ -1,5 +1,8 @@
 # Instructions for setting up Oura2AppleHealth
 
+This setup guide and associate code is used for extending the set of health metrics synced by Oura to Apple Health to include HRV, RHR, VO2_max, and SpO2.
+A Cloudflare webservice handles the authentication and retreival of data from Oura Cloud, and an Apple Shortcut fetches this data from the webservice endpoint and logs it to Apple Health.
+
 ## Step 1: Create an app on developer.ouraring.com
 1. Open https://developer.ouraring.com
 2. Create an app
