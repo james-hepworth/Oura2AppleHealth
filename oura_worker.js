@@ -141,7 +141,7 @@ export default {
     // Convert to array
     const results = Object.values(resultsByDate);
 
-    // Return single object if only one day, array if multiple days
+    // Always return only the most recent day's data
     let response;
     if (results.length === 0) {
       // No data - include debug info
@@ -153,16 +153,18 @@ export default {
         raw_data_count: sleepData?.data?.length || 0,
         message: "No sleep data found for this date range"
       };
-    } else if (results.length === 1) {
-      response = { 
-        hrv: results[0].hrv, 
-        rhr: results[0].rhr, 
-        spo2: results[0].spo2,
-        vo2_max: results[0].vo2_max,
-        date: results[0].date 
-      };
     } else {
-      response = { data: results, count: results.length };
+      // Sort by date and get the most recent (last) entry
+      results.sort((a, b) => a.date.localeCompare(b.date));
+      const mostRecent = results[results.length - 1];
+      
+      response = { 
+        hrv: mostRecent.hrv, 
+        rhr: mostRecent.rhr, 
+        spo2: mostRecent.spo2,
+        vo2_max: mostRecent.vo2_max,
+        date: mostRecent.date 
+      };
     }
 
     return new Response(JSON.stringify(response), {
